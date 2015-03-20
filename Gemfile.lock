@@ -17,9 +17,9 @@ GEM
       dbt (~> 1.1.5)
     motion-sqlite3 (0.5.2)
       motion.h (~> 0.0.4)
-    motion_record (0.0.2)
+    motion_record (0.0.3)
     rake (10.4.2)
-    sugarcube (3.3.3)
+    sugarcube (3.3.4)
 
 PLATFORMS
   ruby

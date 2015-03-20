@@ -36,12 +36,12 @@ class AppDelegate < PM::Delegate
 
 
     product = Product.new(name: "Chorizo", home_order: 1, store_order: 1)
-    #product.save!
+    #product.save
     # puts product.persisted?
     # puts product.id
     # puts product.name
     # puts product.status
 
-    open HomeScreen.new(nav_bar: true)
+    open @hs = HomeScreen.new(nav_bar: true)
   end
 end

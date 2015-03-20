@@ -14,14 +14,34 @@ class HomeScreen < PM::TableScreen
   end
 
   def add_product
-    product = Product.new(name: Time.now.to_s, home_order: 1, store_order: 1)
-    product.save!
-    sleep 0.5
+    puts "----fsv------"
+    ap self # HomeScreen
+    ap tableView # UITableView
+    ap tableView.contentOffset
+    ap "vc: #{tableView.visibleCells}"
+    puts "----fsv------"
+
+    vc = tableView.visibleCells
+    if vc.nil? || vc.empty?
+    	home_index=1
+    else
+	    ap tableView.visibleCells.first.textLabel.text 
+	    titulo_central = vc[vc.size/2].textLabel.text 
+			home_index = Product.where(name: titulo_central).pluck(:home_order).first
+		end
+    ap titulo_central
+    # ap tableView.indexPathForRowAtPoint
+    # ap tableView.indexPathsForVisibleRows
+    product = Product.create(name: Time.now.to_s, home_order: 0, store_order: 0)
+    product.inserta("home", home_index)
+    # product = Product.new(name: Time.now.to_s, home_order: home_index+1, store_order: 1) #"NUEVO PRODUCTO"
+    # product.save
+    # sleep 0.5
 		update_table_data if product.persisted?
   end
 
   def table_data
-    @products = Product.find_all
+    @products = Product.order("home_order ASC").find_all
     [{
       cells: @products.map do |product|
         {
@@ -41,7 +61,7 @@ class HomeScreen < PM::TableScreen
 	  #   App.alert "Sorry, can't delete that row." # BubbleWrap alert
 	  #   false
 	  # else
-	    Product.find(cell[:arguments][:id]).delete!
+	    Product.find(cell[:arguments][:id]).destroy
 	    true # return anything *but* false to allow deletion in the UI
 	  # end
 	end
