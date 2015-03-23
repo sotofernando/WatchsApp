@@ -1,6 +1,6 @@
 class Product < MotionRecord::Base
   # That's all!
-  def inserta(list, index)
+  def insert_new_product(list, index)
   	number_of_products = Product.find_all.size
   	home_index  = number_of_products + 1
   	store_index = number_of_products + 1
@@ -10,31 +10,41 @@ class Product < MotionRecord::Base
   	when "store"
   		store_index = index
   	else
-  		raise "list debe ser home o store!!!"
+  		raise "list must be home or store!!!"
   	end
-  	create_gap(list, index)
+  	create_gap(list, index, number_of_products)
     # product = Product.new(name: Time.now.to_s, home_order: home_index, store_order: store_index) #"NUEVO PRODUCTO"
     self.home_order  = home_index
     self.store_order = store_index
+    self.name = self.id.to_s
     self.save
   end
 
 
-	def create_gap(list, index)
+	def create_gap(list, index, to_index)
 		Product.find_all.each do |p|
 			if list.eql?("home")
-				if p.home_order >= index
+				if p.home_order >= index && p.home_order <= to_index
 					p.home_order = p.home_order + 1
 					p.save
 				end
 			elsif list.eql?("store")
-				raise "FALTA CODIGO ----------------------------------------------"
+				raise "do SAME THING for STORE! ----------------------------------------------"
 			end
 		end
 	end
 
-	def delete_gap(list_order, index)
-		Product.where('#{list_order} >  ?', index).update_all("#{list_order} = #{list_order} - 1")
+	def delete_gap(list, index, to_index)
+		Product.find_all.each do |p|
+			if list.eql?("home")
+				if p.home_order > index && p.home_order <= to_index
+					p.home_order = p.home_order - 1
+					p.save
+				end
+			elsif list.eql?("store")
+				raise "do SAME THING for STORE! ----------------------------------------------"
+			end
+		end
 	end
 
 

@@ -1,1 +1,1 @@
-breakpoint set --file home_screen.rb --line 20
+breakpoint set --file home_screen.rb --line 77

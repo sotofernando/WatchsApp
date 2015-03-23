@@ -2,10 +2,11 @@ class HomeScreen < PM::TableScreen
   title "Home"
   status_bar :light
 	searchable placeholder: "Search product"
+  longpressable
 
   def on_load
     set_nav_bar_button :left, title: "Store", action: :open_store_screen
-    set_nav_bar_button :right, title: "+", action: :add_product
+    set_nav_bar_button :right, title: "Add", action: :add_product
     # open StoreScreen
   end
 
@@ -23,17 +24,17 @@ class HomeScreen < PM::TableScreen
 
     vc = tableView.visibleCells
     if vc.nil? || vc.empty?
-    	home_index=1
+    	home_index = 1
     else
 	    ap tableView.visibleCells.first.textLabel.text 
-	    titulo_central = vc[vc.size/2].textLabel.text 
-			home_index = Product.where(name: titulo_central).pluck(:home_order).first
+	    middle_product_name = vc[vc.size/2].textLabel.text 
+			home_index = Product.where(name: middle_product_name).pluck(:home_order).first
 		end
-    ap titulo_central
+    ap middle_product_name
     # ap tableView.indexPathForRowAtPoint
     # ap tableView.indexPathsForVisibleRows
-    product = Product.create(name: Time.now.to_s, home_order: 0, store_order: 0)
-    product.inserta("home", home_index)
+    product = Product.create(name: Time.now.to_f.to_s, home_order: 0, store_order: 0)
+    product.insert_new_product("home", home_index)
     # product = Product.new(name: Time.now.to_s, home_order: home_index+1, store_order: 1) #"NUEVO PRODUCTO"
     # product.save
     # sleep 0.5
@@ -46,10 +47,13 @@ class HomeScreen < PM::TableScreen
       cells: @products.map do |product|
         {
           title: product.name,
-          editing_style: :delete,
+          editing_style: :delete, #:insert, #:none,
           moveable: true,
+		      # Tap action, passed arguments
+		      action: :tapped_cell,
+		      long_press_action: :long_pressed_cell, # requires `longpressable`
+		      # arguments: { data: [ "lots", "of", "data" ] },
           # subtitle: product.description,
-          # action: :edit_product,
           arguments: { id: product.id }
         }
       end
@@ -61,13 +65,38 @@ class HomeScreen < PM::TableScreen
 	  #   App.alert "Sorry, can't delete that row." # BubbleWrap alert
 	  #   false
 	  # else
-	    Product.find(cell[:arguments][:id]).destroy
+	    product = Product.find(cell[:arguments][:id])
+	    product.delete_gap("home", product.home_order, Product.find_all.size)
+	    product.destroy
 	    true # return anything *but* false to allow deletion in the UI
 	  # end
 	end
 
 	def on_cell_moved(args)
-	  # Do something here
+		a = args
+		ap "moved!!!"
+	  ap args
+	  ap from_index = args[:paths][:from].indexAtPosition(1)
+	  ap to_index   = args[:paths][:to].indexAtPosition(1)
+	  ap product = Product.find(args[:cell][:arguments][:id])
+	  if from_index > to_index
+		  product.create_gap("home", to_index+1, from_index)
+		else
+		  product.delete_gap("home", from_index+1, to_index+1)
+		end
+	  product.home_order = to_index+1
+	  product.save
+	  ap "debug fsv"
+	end
+
+	def long_pressed_cell
+		toggle_edit_mode
+		ap "longpressable!!!"
+	end
+
+	def tapped_cell
+		ap "tocado!"
+		
 	end
 
 	# def table_data

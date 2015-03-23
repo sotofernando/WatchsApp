@@ -11,11 +11,11 @@ Motion::Project::App.setup do |app|
   # app.deployment_target = '8.1'
   # ShopList2Ord
   # 2 Order List
-  app.name = '2 Order List'
-  app.identifier = 'com.sotofernando.shoppinglist'
+  app.name = 'WatchsApp'
+  app.identifier = 'com.sotofernando.WatchsApp'
   app.codesign_certificate = 'iPhone Developer: Fernando Soto Villaran (8N59NNTU76)'
-  app.provisioning_profile = '~/provisioning/shoppinglist.mobileprovision'
-  app.icons = ['2_order_list.png', '2_order_list@2x.png']
+  app.provisioning_profile = '~/provisioning/WatchsApp.mobileprovision'
+  app.icons = ['WatchsApp.png', 'WatchsApp@2x.png']
   # app.icons = ["Icon.png",    # <- iPhone non-retina standard icon
   #           "Icon@2x.png"] # <- Retina iPhone iconend
 end
