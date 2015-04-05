@@ -16,23 +16,23 @@ class HomeScreen < PM::TableScreen
 
   def add_product
     # puts "----fsv------"
-    # ap self # HomeScreen
-    # ap tableView # UITableView
-    # ap tableView.contentOffset
-    # ap "vc: #{tableView.visibleCells}"
+    # mp self # HomeScreen
+    # mp tableView # UITableView
+    # mp tableView.contentOffset
+    # mp "vc: #{tableView.visibleCells}"
     # puts "----fsv------"
 
     vc = tableView.visibleCells
     if vc.nil? || vc.empty?
     	index = 1
     else
-	    # ap tableView.visibleCells.first.textLabel.text 
+	    # mp tableView.visibleCells.first.textLabel.text 
 	    middle_product_name = vc[vc.size/2].textLabel.text 
 			index = Product.where(name: middle_product_name).pluck(:home_order).first
 		end
-    # ap middle_product_name
-    # ap tableView.indexPathForRowAtPoint
-    # ap tableView.indexPathsForVisibleRows
+    # mp middle_product_name
+    # mp tableView.indexPathForRowAtPoint
+    # mp tableView.indexPathsForVisibleRows
     product = Product.create(name: Time.now.to_f.to_s, home_order: 0, store_order: 0)
     product.insert_new_product("home", index)
 		update_table_data if product.persisted?
@@ -75,10 +75,10 @@ class HomeScreen < PM::TableScreen
 
 	def on_cell_moved(args)
 		a = args
-	  ap args
-	  ap from_index = args[:paths][:from].indexAtPosition(1)
-	  ap to_index   = args[:paths][:to].indexAtPosition(1)
-	  ap product = Product.find(args[:cell][:arguments][:product].id)
+	  mp args
+	  mp from_index = args[:paths][:from].indexAtPosition(1)
+	  mp to_index   = args[:paths][:to].indexAtPosition(1)
+	  mp product = Product.find(args[:cell][:arguments][:product].id)
 	  if from_index > to_index
 		  product.create_gap("home", to_index+1, from_index)
 		else
@@ -87,7 +87,7 @@ class HomeScreen < PM::TableScreen
 	  product.home_order = to_index+1
     # product.save
     update_table_data if product.save
-		ap "moved!!!"
+		mp "moved!!!"
 	end
 
 	def long_pressed_cell(args)
@@ -97,11 +97,11 @@ class HomeScreen < PM::TableScreen
     	# index = 1
     else
   	  puts "----fsv long_pressed_cell-----"
-	    ap tableView.visibleCells
-	    ap tableView.visibleCells.first
-	    ap tableView.visibleCells.first.frame
-	    ap tableView.visibleCells.first.frame.origin
-	    ap tableView.visibleCells.first.frame.origin.y
+	    mp tableView.visibleCells
+	    mp tableView.visibleCells.first
+	    mp tableView.visibleCells.first.frame
+	    mp tableView.visibleCells.first.frame.origin
+	    mp tableView.visibleCells.first.frame.origin.y
 	    puts "----fsv long_pressed_cell-----"
 	    y_position = tableView.visibleCells.first.frame.origin.y + 100
 	  #   middle_product_name = vc[vc.size/2].textLabel.text 
@@ -119,19 +119,19 @@ class HomeScreen < PM::TableScreen
     }
     # add @uitf
     @uitf.delegate = self
-    ap @uitf
-    ap @uitf.class
-    ap @uitf.delegate
+    mp @uitf
+    mp @uitf.class
+    mp @uitf.delegate
 		# @input = UITextInput.new
 		# add @input
 		# toggle_edit_mode
-		ap "longpressable!!!"
+		mp "longpressable!!!"
 	end
 
   def textFieldShouldReturn(textfield)
     textfield.resignFirstResponder
     puts "----fsv tf-----"
-    ap textfield
+    mp textfield
     puts "----fsv tf-----"
     product = Product.find(@prod.id)
     product.name = textfield.text
@@ -141,7 +141,7 @@ class HomeScreen < PM::TableScreen
   end
 
 	def tapped_cell
-		ap "tocado!"
+		mp "tocado!"
 		
 	end
 

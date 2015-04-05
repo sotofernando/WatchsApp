@@ -7,7 +7,7 @@ GIT
 GEM
   remote: https://rubygems.org/
   specs:
-    ProMotion (2.2.1)
+    ProMotion (2.3.0)
       methadone (~> 1.7)
     dbt (1.1.5)
     methadone (1.9.0)

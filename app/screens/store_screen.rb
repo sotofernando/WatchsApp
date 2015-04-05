@@ -16,10 +16,10 @@ class StoreScreen < PM::TableScreen
 
   def add_product
     # puts "----fsv------"
-    # ap self # StoreScreen
-    # ap tableView # UITableView
-    # ap tableView.contentOffset
-    # ap "vc: #{tableView.visibleCells}"
+    # mp self # StoreScreen
+    # mp tableView # UITableView
+    # mp tableView.contentOffset
+    # mp "vc: #{tableView.visibleCells}"
     # puts "----fsv------"
 
     vc = tableView.visibleCells
@@ -27,19 +27,19 @@ class StoreScreen < PM::TableScreen
       index = 1
     else
   	  puts "---- cell ini ------"
-      ap tableView.visibleCells
-      ap tableView.visibleCells.first
-      ap tableView.visibleCells.first.textLabel
-      ap tableView.visibleCells.first.textLabel.text 
-      # ap tableView.visibleCells.first.cell_identifier 
-      # ap tableView.visibleCells.first.cell_identifier.text 
+      mp tableView.visibleCells
+      mp tableView.visibleCells.first
+      mp tableView.visibleCells.first.textLabel
+      mp tableView.visibleCells.first.textLabel.text 
+      # mp tableView.visibleCells.first.cell_identifier 
+      # mp tableView.visibleCells.first.cell_identifier.text 
 	    puts "---- cell fin ------"
       middle_product_name = vc[vc.size/2].textLabel.text 
       index = Product.where(name: middle_product_name).pluck(:store_order).first
     end
-    # ap middle_product_name
-    # ap tableView.indexPathForRowAtPoint
-    # ap tableView.indexPathsForVisibleRows
+    # mp middle_product_name
+    # mp tableView.indexPathForRowAtPoint
+    # mp tableView.indexPathsForVisibleRows
     product = Product.create(name: Time.now.to_f.to_s, home_order: 0, store_order: 0)
     product.insert_new_product("store", index)
     update_table_data if product.persisted?
@@ -84,11 +84,11 @@ class StoreScreen < PM::TableScreen
 
   def on_cell_moved(args)
     a = args
-    ap "moved!!!"
-    ap args
-    ap from_index = args[:paths][:from].indexAtPosition(1)
-    ap to_index   = args[:paths][:to].indexAtPosition(1)
-    ap product = Product.find(args[:cell][:arguments][:id])
+    mp "moved!!!"
+    mp args
+    mp from_index = args[:paths][:from].indexAtPosition(1)
+    mp to_index   = args[:paths][:to].indexAtPosition(1)
+    mp product = Product.find(args[:cell][:arguments][:id])
     if from_index > to_index
       product.create_gap("store", to_index+1, from_index)
     else
@@ -97,16 +97,16 @@ class StoreScreen < PM::TableScreen
     product.store_order = to_index+1
     # product.save
     update_table_data if product.save
-		ap "moved!!!"
+		mp "moved!!!"
   end
 
   def long_pressed_cell
     # toggle_edit_mode
-    ap "longpressable!!!"
+    mp "longpressable!!!"
   end
 
   def tapped_cell
-    ap "tocado!"
+    mp "tocado!"
     
   end
 
