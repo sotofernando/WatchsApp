@@ -101,7 +101,7 @@ class StoreScreen < PM::TableScreen
   end
 
   def long_pressed_cell
-    toggle_edit_mode
+    # toggle_edit_mode
     ap "longpressable!!!"
   end
 

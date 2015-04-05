@@ -52,7 +52,7 @@ class HomeScreen < PM::TableScreen
 		      long_press_action: :long_pressed_cell, # requires `longpressable`
 		      # arguments: { data: [ "lots", "of", "data" ] },
           # subtitle: product.description,
-          arguments: { id: product.id }
+          arguments: { product: product }
         }
       end
     }]
@@ -63,7 +63,7 @@ class HomeScreen < PM::TableScreen
 	  #   App.alert "Sorry, can't delete that row." # BubbleWrap alert
 	  #   false
 	  # else
-	    product = Product.find(cell[:arguments][:id])
+	    product = Product.find(cell[:arguments][:product].id)
 	    product.delete_gap("home",  product.home_order,  Product.find_all.size)
       product.delete_gap("store", product.store_order, Product.find_all.size)
       product.destroy
@@ -78,7 +78,7 @@ class HomeScreen < PM::TableScreen
 	  ap args
 	  ap from_index = args[:paths][:from].indexAtPosition(1)
 	  ap to_index   = args[:paths][:to].indexAtPosition(1)
-	  ap product = Product.find(args[:cell][:arguments][:id])
+	  ap product = Product.find(args[:cell][:arguments][:product].id)
 	  if from_index > to_index
 		  product.create_gap("home", to_index+1, from_index)
 		else
@@ -90,10 +90,55 @@ class HomeScreen < PM::TableScreen
 		ap "moved!!!"
 	end
 
-	def long_pressed_cell
-		toggle_edit_mode
+	def long_pressed_cell(args)
+
+    vc = tableView.visibleCells
+    if vc.nil? || vc.empty?
+    	# index = 1
+    else
+  	  puts "----fsv long_pressed_cell-----"
+	    ap tableView.visibleCells
+	    ap tableView.visibleCells.first
+	    ap tableView.visibleCells.first.frame
+	    ap tableView.visibleCells.first.frame.origin
+	    ap tableView.visibleCells.first.frame.origin.y
+	    puts "----fsv long_pressed_cell-----"
+	    y_position = tableView.visibleCells.first.frame.origin.y + 100
+	  #   middle_product_name = vc[vc.size/2].textLabel.text 
+			# index = Product.where(name: middle_product_name).pluck(:home_order).first
+		end
+
+		@prod = args[:product]
+    @uitf = add UITextField.new, {
+      text: args[:product].name,
+      frame: CGRectMake(10, y_position, 300, 40),
+      # tint_color: UIColor.whiteColor,
+      text_color: UIColor.whiteColor,
+      # color: UIColor.whiteColor,
+      background_color: UIColor.blackColor
+    }
+    # add @uitf
+    @uitf.delegate = self
+    ap @uitf
+    ap @uitf.class
+    ap @uitf.delegate
+		# @input = UITextInput.new
+		# add @input
+		# toggle_edit_mode
 		ap "longpressable!!!"
 	end
+
+  def textFieldShouldReturn(textfield)
+    textfield.resignFirstResponder
+    puts "----fsv tf-----"
+    ap textfield
+    puts "----fsv tf-----"
+    product = Product.find(@prod.id)
+    product.name = textfield.text
+    update_table_data if product.save
+    remove @uitf
+    true
+  end
 
 	def tapped_cell
 		ap "tocado!"

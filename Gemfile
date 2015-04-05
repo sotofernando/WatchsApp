@@ -29,7 +29,7 @@ gem "motion-kit"
 
 # Awesome Print
 # gem "awesome_print_motion", "~> 0.1"
-gem "awesome_print_motion"
+gem "motion_print"
 
 
 gem "motion_record"

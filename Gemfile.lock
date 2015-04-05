@@ -9,7 +9,6 @@ GEM
   specs:
     ProMotion (2.2.1)
       methadone (~> 1.7)
-    awesome_print_motion (0.1.0)
     dbt (1.1.5)
     methadone (1.9.0)
       bundler
@@ -17,6 +16,7 @@ GEM
       dbt (~> 1.1.5)
     motion-sqlite3 (0.5.2)
       motion.h (~> 0.0.4)
+    motion_print (0.0.5)
     motion_record (0.0.3)
     rake (10.4.2)
     sugarcube (3.3.4)
@@ -26,10 +26,10 @@ PLATFORMS
 
 DEPENDENCIES
   ProMotion
-  awesome_print_motion
   motion-kit
   motion-sqlite3
   motion.h!
+  motion_print
   motion_record
   rake
   sugarcube
